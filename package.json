@@ -1,0 +1,28 @@
+{
+  "name": "gps-indoor-track-generator",
+  "version": "1.0.0",
+  "description": "Convert lap times to tcx files",
+  "main": "app.ts",
+  "scripts": {
+    "script": "ts-node app.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "tslint -c tslint.json src/**/*.ts"
+  },
+  "keywords": [
+    "node"
+  ],
+  "author": "Jordan Heinrichs",
+  "license": "MIT",
+  "dependencies": {
+    "@types/argparse": "^1.0.35",
+    "@types/csv-parse": "^1.1.11",
+    "@types/node": "^10.12.21",
+    "@types/xmlbuilder": "0.0.34",
+    "argparse": "^1.0.10",
+    "csv-parse": "^4.3.1",
+    "ts-node": "^8.0.2",
+    "tslint": "^5.12.1",
+    "typescript": "^3.3.1",
+    "xmlbuilder": "^10.1.1"
+  }
+}
