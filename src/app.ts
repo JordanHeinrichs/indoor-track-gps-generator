@@ -1,5 +1,9 @@
 import { ArgumentParser } from 'argparse';
+import { Config } from 'config';
+import * as fs from 'fs';
+import moment = require('moment');
 import { parseCsv } from './parse-csv';
+import { TcxWriter } from './tcx-writer';
 
 const parser = new ArgumentParser({
     addHelp: true,
@@ -14,7 +18,6 @@ parser.addArgument(
         required: true,
     },
 );
-
 parser.addArgument(
     [ '-i', '--input'],
     {
@@ -22,7 +25,6 @@ parser.addArgument(
         required: true,
     },
 );
-
 parser.addArgument(
     [ '-o', '--output'],
     {
@@ -30,11 +32,28 @@ parser.addArgument(
         required: true,
     },
 );
+parser.addArgument(
+    [ '-t', '--time'],
+    {
+        help: 'Start time',
+        required: false,
+    },
+);
 
 async function main(): Promise<void> {
     const args = parser.parseArgs();
     const laps = await parseCsv(args.input);
-    console.log(laps);
+    const startTime = moment(args.time);
+
+    const config: Config = JSON.parse(fs.readFileSync(args.config).toString());
+
+    const tcxWriter = new TcxWriter(startTime, args.output, config);
+
+    laps.forEach((lap) => {
+        tcxWriter.writeLap(lap);
+    });
+
+    await tcxWriter.writeToFile();
 }
 
 main().catch((err) => {

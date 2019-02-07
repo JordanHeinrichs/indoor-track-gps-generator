@@ -6,7 +6,7 @@ export class Coordinate {
 
     public add(metersNorth: number, metersSouth: number, config: Config): Coordinate {
         return new Coordinate(this.latitude + this.meterToLatitude(metersNorth, config),
-            this.metersToLongitude(metersSouth, config));
+            this.longitude + this.metersToLongitude(metersSouth, config));
     }
 
     private meterToLatitude(meter: number, config: Config): number {
