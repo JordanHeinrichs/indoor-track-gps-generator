@@ -32,7 +32,7 @@ export class TcxWriter {
         for (let percent = 0; percent < 1; percent += percentStep) {
             this.xmlWriter = this.xmlWriter.ele('Trackpoint');
 
-            this.currentTime = this.currentTime.add(lap.time.asMilliseconds() / percentStep, 'milliseconds');
+            this.currentTime = this.currentTime.add(lap.time.asMilliseconds() * percentStep, 'milliseconds');
             this.currentDistance = this.currentDistance + percentStep * this.config.trackLength;
             this.xmlWriter = this.xmlWriter.ele('Time', this.formatDate(this.currentTime)).up();
             this.xmlWriter = this.xmlWriter.ele('DistanceMeters', this.currentDistance.toString()).up();
