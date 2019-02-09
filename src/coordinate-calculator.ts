@@ -14,8 +14,13 @@ export class CoordinateCalculator {
     private readonly centerCoordinate: Coordinate;
 
     constructor(private config: Config) {
-        this.sideLength = config.trackLength / (2 * Math.PI * (1 / config.ratioSideToRadius) + 2);
-        this.radius =  (1 / config.ratioSideToRadius) * this.sideLength;
+        if (config.ratioSideToRadius === 0) {
+            this.sideLength = 0;
+            this.radius = config.trackLength / (2 * Math.PI);
+        } else {
+            this.sideLength = config.trackLength / (2 * Math.PI * (1 / config.ratioSideToRadius) + 2);
+            this.radius =  (1 / config.ratioSideToRadius) * this.sideLength;
+        }
         this.offset = config.offset * Math.PI / 180;
         this.trackLength = config.trackLength;
 

@@ -11,18 +11,18 @@ export class Coordinate {
 
     private meterToLatitude(meter: number, config: Config): number {
         // formula from https://en.wikipedia.org/wiki/Geographic_coordinate_system
-        const latitudePositive = Math.abs(config.centerLongitude);
-        const meterToLatitudeConv =  111132.954 - 559.822 * Math.cos(2 * latitudePositive * Math.PI / 180) +
-            1.175 * Math.cos(4 * latitudePositive) - 0.0023 * Math.cos(6 * latitudePositive  * Math.PI / 180);
+        const latitude = config.centerLatitude * Math.PI / 180;
+        const meterToLatitudeConv =  111132.954 - 559.822 * Math.cos(2 * latitude) +
+            1.175 * Math.cos(4 * latitude) - 0.0023 * Math.cos(6 * latitude);
         return meter / Math.abs(meterToLatitudeConv);
     }
 
     private metersToLongitude(meter: number, config: Config): number {
         // formula from https://en.wikipedia.org/wiki/Geographic_coordinate_system
-        const longitudePositive = Math.abs(config.centerLongitude);
-        const meterToLongitudeConv =  111412.84 * Math.cos(longitudePositive * Math.PI / 180) -
-            93.5 * Math.cos(3 * longitudePositive * Math.PI / 180) +
-            0.118 * Math.cos(5 * longitudePositive * Math.PI / 180);
+        const latitude = config.centerLatitude * Math.PI / 180;
+        const meterToLongitudeConv =  111412.84 * Math.cos(latitude) -
+            93.5 * Math.cos(3 * latitude) +
+            0.118 * Math.cos(5 * latitude);
         return meter / Math.abs(meterToLongitudeConv);
     }
 }
