@@ -8,12 +8,12 @@ import { CoordinateCalculator } from './coordinate-calculator';
 export class TcxWriter {
     private POINTS_PER_LAP = 25;
     private xmlWriter: xmlbuilder.XMLElementOrXMLNode;
-    private currentTime: Moment;
-    private currentDistance = 0;
+    private lapStartTime: Moment;
+    private lapStartDistance = 0;
     private coordinateCalculator: CoordinateCalculator;
 
     constructor(private readonly startTime: Moment, private readonly output: string, private readonly config: Config) {
-        this.currentTime =  this.startTime;
+        this.lapStartTime =  this.startTime;
         this.coordinateCalculator = new CoordinateCalculator(config);
 
         this.xmlWriter = xmlbuilder.create('TrainingCenterDatabase');
@@ -28,14 +28,16 @@ export class TcxWriter {
         this.xmlWriter = this.xmlWriter.ele('DistanceMeters', this.config.trackLength.toString()).up();
         this.xmlWriter = this.xmlWriter.ele('Track');
 
+        let currentLapTime = this.lapStartTime.clone();
+        let currentLapDistance = this.lapStartDistance;
         const percentStep = 1 / this.POINTS_PER_LAP;
         for (let percent = 0; percent < 1; percent += percentStep) {
             this.xmlWriter = this.xmlWriter.ele('Trackpoint');
 
-            this.currentTime = this.currentTime.add(lap.time.asMilliseconds() * percentStep, 'milliseconds');
-            this.currentDistance = this.currentDistance + percentStep * this.config.trackLength;
-            this.xmlWriter = this.xmlWriter.ele('Time', this.formatDate(this.currentTime)).up();
-            this.xmlWriter = this.xmlWriter.ele('DistanceMeters', this.currentDistance.toString()).up();
+            currentLapTime = currentLapTime.add(lap.time.asMilliseconds() * percentStep, 'milliseconds');
+            currentLapDistance = currentLapDistance + percentStep * this.config.trackLength;
+            this.xmlWriter = this.xmlWriter.ele('Time', this.formatDate(currentLapTime)).up();
+            this.xmlWriter = this.xmlWriter.ele('DistanceMeters', currentLapDistance.toString()).up();
 
             const coordinate = this.coordinateCalculator.getCoordinateForPercent(percent);
             this.xmlWriter = this.xmlWriter.ele('Position')
@@ -50,6 +52,9 @@ export class TcxWriter {
             }
             this.xmlWriter = this.xmlWriter.up();
         }
+
+        this.lapStartTime = this.lapStartTime.add(lap.time);
+        this.lapStartDistance += this.config.trackLength;
 
         this.xmlWriter = this.xmlWriter.up();
         this.xmlWriter = this.xmlWriter.up();
