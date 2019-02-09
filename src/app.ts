@@ -14,14 +14,15 @@ const parser = new ArgumentParser({
 parser.addArgument(
     [ '-c', '--config'],
     {
-        help: 'Config json file located in the config folder',
+        help: 'Config json file, refer to samples in the config folder',
         required: true,
     },
 );
 parser.addArgument(
     [ '-i', '--input'],
     {
-        help: 'Input csv file, formatted comma seperated',
+        help: 'Input csv file, formatted comma seperated, first column duration, ' +
+            'second heart rate, refer to sample file.',
         required: true,
     },
 );
@@ -35,8 +36,8 @@ parser.addArgument(
 parser.addArgument(
     [ '-t', '--time'],
     {
-        help: 'Start time',
-        required: false,
+        help: 'Start time in your local timezone. Best ISO 8601: yyyy-mm-ddThh:mm:ss',
+        required: true,
     },
 );
 
