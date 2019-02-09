@@ -19,7 +19,7 @@ export class TcxWriter {
         this.xmlWriter = xmlbuilder.create('TrainingCenterDatabase');
         this.xmlWriter = this.xmlWriter.ele('Activities')
             .ele('Activity', {Sport: 'running'})
-            .ele('ID', this.formatDate(startTime)).up();
+            .ele('Id', this.formatDate(startTime)).up();
     }
 
     public writeLap(lap: Lap): void {
